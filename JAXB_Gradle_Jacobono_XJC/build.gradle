@@ -38,16 +38,17 @@ dependencies {
 	/*
 	 * IMPORTANT:
 	 * You have to select the correct dependency group depending on your version of JAXB
-	 * The three dependencies commented out below will work for all versions of JAXB up to 2.2.8
+	 * The three dependencies commented out below will work for all RI versions of JAXB up to 2.2.8
 	 * 
 	 * If you see java.lang.NoClassDefFoundError: com/sun/xml/bind/api/ErrorListener
      * when running the build then use the dependencies for 2.2.10 and higher.
-	 * 
-	 * jaxb "com.sun.xml.bind:jaxb-xjc:${jaxbVersion}"
-	 * jaxb "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
-	 * jaxb "javax.xml.bind:jaxb-api:${jaxbVersion}"
-	 * 	
-	 * The two dependencies below should work for versions of JAXB after 2.2.8
+	 */ 
+//	 jaxb "com.sun.xml.bind:jaxb-xjc:${jaxbVersion}"
+//	 jaxb "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+//	 jaxb "javax.xml.bind:jaxb-api:${jaxbVersion}"
+	
+	/* 	
+	 * The two dependencies below should work for RI versions of JAXB after 2.2.8
 	 */
 	jaxb "org.glassfish.jaxb:jaxb-xjc:${jaxbVersion}"
 	jaxb "org.glassfish.jaxb:jaxb-runtime:${jaxbVersion}"
