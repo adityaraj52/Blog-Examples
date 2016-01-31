@@ -1,0 +1,108 @@
+buildscript {
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6'
+  }
+}
+
+repositories {
+	jcenter()
+	mavenCentral()
+  }
+
+apply plugin: 'com.github.jacobono.jaxb' // The Jacobono JAXB plugin for XJC
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Define JAXB2 dependencies (using appropriate jaxbVersion number).
+dependencies {
+	/*
+	 * IMPORTANT:
+	 * You have to select the correct dependency group depending on your version of JAXB
+	 * The three dependencies commented out below will work for all versions of JAXB up to 2.2.8
+	 * 
+	 * If you see java.lang.NoClassDefFoundError: com/sun/xml/bind/api/ErrorListener
+     * when running the build then use the dependencies for 2.2.10 and higher.
+	 * 
+	 * jaxb "com.sun.xml.bind:jaxb-xjc:${jaxbVersion}"
+	 * jaxb "com.sun.xml.bind:jaxb-impl:${jaxbVersion}"
+	 * jaxb "javax.xml.bind:jaxb-api:${jaxbVersion}"
+	 * 	
+	 * The two dependencies below should work for versions of JAXB after 2.2.8
+	 */
+	jaxb "org.glassfish.jaxb:jaxb-xjc:${jaxbVersion}"
+	jaxb "org.glassfish.jaxb:jaxb-runtime:${jaxbVersion}"
+}
+
+// Clean (i.e. delete temporary folders
+clean {
+	delete 'src'
+	delete 'build'
+	delete 'schema'
+}
+
+// JAXB2 source code generation with XJC (binding compiler) using the schema in the xsd folder 
+// and the package name specified in gradle.properties.
+jaxb {
+	xsdDir='xsd'
+	xjc {
+		generatePackage "${jaxbPackageName}"
+	}
+}
+
+// Create the JAR file containing JAXB generated classes and useful manifest
+jar {
+	archiveName "Generated_${rootProject.name}-${jarImplVersion}.jar"
+	manifest {
+		attributes (
+			'Specification-Title': "Generated ${rootProject.name} JAR",
+			'Specification-Vendor': 'Jalamor Software',
+			'Implementation-Title': rootProject.name,
+			'Implementation-Version': jarImplVersion,
+			'Created-By': org.gradle.internal.jvm.Jvm.current(),
+			'Built-With': GradleVersion.current().toString(),
+			'JAXB-Version': jaxbVersion,
+			'Source-Compatibility': sourceCompatibility,
+			'Target-Compatibility': targetCompatibility,
+			'Build-Time-ISO-8601': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		)
+	}
+}
+
+// Creation of companion JAXB source JAR with manifest
+task srcjar(type: Jar) {
+	archiveName "Generated_${rootProject.name}-${jarImplVersion}-src.jar"
+	from 'src/main/java'
+	manifest {
+		attributes (
+			'Specification-Title': "Generated ${rootProject.name} Source JAR",
+			'Specification-Vendor': 'Jalamor Software',
+			'Implementation-Title': rootProject.name,
+			'Implementation-Version': jarImplVersion,
+			'Created-By': org.gradle.internal.jvm.Jvm.current(),
+			'Built-With': GradleVersion.current().toString(),
+			'JAXB-Version': jaxbVersion,
+			'Source-Compatibility': sourceCompatibility,
+			'Target-Compatibility': targetCompatibility,
+			'Build-Time-ISO-8601': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+		)
+	}
+}
+
+// Custom task to clean and build everything in correct order
+task buildall(dependsOn: ['clean', 'xjc', 'jar', 'srcjar']) {
+	xjc.mustRunAfter clean
+	jar.mustRunAfter xjc
+	srcjar.mustRunAfter jar
+}
+
+// Create a gradle wrapper (the preferred build method)
+task wrapper(type:Wrapper) {
+	gradleVersion = "${gradleVersion}"
+}
