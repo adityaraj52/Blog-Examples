@@ -62,7 +62,7 @@ clean {
 
 // Define the JAXB Plugin Conventions
 jaxb {
-	xsdDir='xsd' // Define the folder for location of the schema file
+	xsdDir='xsdFolder' // Define the folder for location of the schema file
 	xjc { 
 		generatePackage "${jaxbPackageName}" // Set the package name for generated source files
 	}
