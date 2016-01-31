@@ -1,4 +1,7 @@
-// Specify Gradle Plugins script block for (this is for Jacobono JAXB version 1.3.5 at time of writing)
+/* 
+ * Specify Gradle Plugins script block for (this is for Jacobono JAXB version 1.3.5 at time of writing).
+ * This should work in Gradle 2.1 and later.
+ */
 plugins {
 	id 'com.github.jacobono.jaxb' version '1.3.5'
 }
@@ -6,7 +9,9 @@ plugins {
 /* 
  * Alternatively you can use  JCenter (version 1.3.6 at time of writing) by 
  * commenting out the plugins block above and uncommenting the lines below
- * down to and including apply plugin: 'com.github.jacobono.jaxb'
+ * down to and including apply plugin: 'com.github.jacobono.jaxb'.
+ * This should work in all Gradle versions.
+ * 
  * I have successfully tested both approaches.
  */
 // 
