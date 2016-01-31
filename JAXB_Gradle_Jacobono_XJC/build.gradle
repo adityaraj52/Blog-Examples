@@ -1,26 +1,39 @@
-buildscript {
-  repositories {
-    jcenter()
-    mavenCentral()
-  }
-  dependencies {
-    classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6'
-  }
+// Specify Gradle Plugins script block for (this is for Jacobono JAXB version 1.3.5 at time of writing)
+plugins {
+	id 'com.github.jacobono.jaxb' version '1.3.5'
 }
+
+/* 
+ * Alternatively you can use  JCenter (version 1.3.6 at time of writing) by 
+ * commenting out the plugins block above and uncommenting the lines below
+ * down to and including apply plugin: 'com.github.jacobono.jaxb'
+ * I have successfully tested both approaches.
+ */
+// 
+//buildscript {
+//  repositories {
+//    jcenter()
+//    mavenCentral()
+//  }
+//  dependencies {
+//    classpath 'com.github.jacobono:gradle-jaxb-plugin:1.3.6'
+//  }
+//}
+//
+//apply plugin: 'com.github.jacobono.jaxb' // The Jacobono JAXB plugin for XJC
+
+apply plugin: 'java' 
+apply plugin: 'eclipse-wtp' // Used to generate files used by Eclipse IDE
 
 repositories {
 	jcenter()
 	mavenCentral()
   }
 
-apply plugin: 'com.github.jacobono.jaxb' // The Jacobono JAXB plugin for XJC
-apply plugin: 'java'
-apply plugin: 'eclipse-wtp'
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-
-// Define JAXB2 dependencies (using appropriate jaxbVersion number).
+ 
+// Define JAXB2 dependencies (using appropriate jaxbVersion number). You can use any JAXB implmentation.  
 dependencies {
 	/*
 	 * IMPORTANT:
@@ -47,12 +60,11 @@ clean {
 	delete 'schema'
 }
 
-// JAXB2 source code generation with XJC (binding compiler) using the schema in the xsd folder 
-// and the package name specified in gradle.properties.
+// Define the JAXB Plugin Conventions
 jaxb {
-	xsdDir='xsd'
-	xjc {
-		generatePackage "${jaxbPackageName}"
+	xsdDir='xsd' // Define the folder for location of the schema file
+	xjc { 
+		generatePackage "${jaxbPackageName}" // Set the package name for generated source files
 	}
 }
 
