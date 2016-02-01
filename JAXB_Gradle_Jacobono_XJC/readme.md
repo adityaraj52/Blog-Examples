@@ -32,10 +32,16 @@ The project is built using a Gradle build script.  Follow these instructions:
 ### The Manifest ###
 The manifest of the JARs is particularly useful because it tells you everything you need to know about how the JAR was created such as the release version number, Java compiler version, Gradle version, JAXB version, source and target compatibility and exact date and time of the build.  I will be creating another blog post showing how to include other useful information such as Jenkins build number and even a GIT commit in the manifest.
 
+### Changing the Version Number for the JAR ###
+Changing the release version number is also a simple as edit in `gradle.properties`. Change the `jarImplVersion` property to what you need. Obviously we chose version `1.0` for the initial release.  Any future modifications to the JAR (when the schema changes), should have appropriate point or full number increments to reflect changes.
+
+### Changing the Generated Source Package ###
+The Jacobono plugin will instruct XJC to use whatever package name you supply when it generates the Java source code.  This can be done by modifying the `jaxbPackageName` property in `gradle.properties`
+
+### Changing the Gradle Version ###
+At time of writing, the latest version of Gradle was 2.10.  The Gradle script in this project should work with any version newer than 2.1.  Simply edit the `gradle.properties` file and changing the `gradleVersion` property to what you want.
+
 ### Changing the JAXB Version ###
-Changing the version of JAXB is as simple as editing the `gradle.properties` file and changing the `jaxbVersion` property to what you want. I chose version `2.2.10` for this example because it was the latest version, but generally I try to make the JAXB version line up with the version that shipped with the Java version I am using for compilation (e.g. if you were using Java compiler 1.7.0_051, you might consider JAXB version 2.2.4).  
+Changing the version of JAXB is as simple as editing the `gradle.properties` file and changing the `jaxbVersion` property to what you want. I chose version `2.2.10` for this example because it was the latest version, but generally I try to make the JAXB version line up with the version that shipped with the Java version I am using for compilation (e.g. if you were using Java compiler 1.7.0_051, you might consider JAXB version 2.2.4). Note that depending on the version, you need to change your dependencies in the gradle build (2.2.10 and 2.2.11 has a different groupID).
 
 There are a lot of versions of JAXB-XJC.  You can find the ones I use listed at [Maven Central](http://search.maven.org/#search|ga|1|%28g%3A%22com.sun.xml.bind%22%20OR%20g%3A%22org.glassfish.jaxb%22%29%20AND%20a%3A%22jaxb-xjc%22 "Maven Central")
-
-### Changing the Version Number for the JAR ###
-Changing the version number is also a simple as edit in `gradle.properties`. Change the `version` property to what you need. Obviously we chose version `1.0` for the initial release.  Any future modifications to the JAR (when VIN schema changes), should have appropriate point or full number increments to reflect changes.
